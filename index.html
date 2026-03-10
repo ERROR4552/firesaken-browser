@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firesaken - Chicken</title>
+    <link rel="icon" href="chicken.jpeg" type="image/jpeg">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            font-family: 'Press Start 2P', system-ui;
+            background: #0a0a0a;
+            color: #ffcc00;
+            overflow: hidden;
+        }
+        
+        .browser-window {
+            max-width: 1400px;
+            margin: 20px auto;
+            border: 8px solid #ff4400;
+            border-radius: 20px;
+            box-shadow: 0 0 60px rgba(255, 68, 0, 0.6),
+                        inset 0 0 40px rgba(255, 215, 0, 0.2);
+            background: #111;
+            overflow: hidden;
+        }
+        
+        .title-bar {
+            background: linear-gradient(90deg, #1a1a1a, #330000);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 4px solid #ff8800;
+        }
+        
+        .address-bar {
+            background: #1f1f1f;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 3px solid #ff4400;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            background: #222;
+            border: 3px solid #ff8800;
+            color: #ffcc00;
+            padding: 14px 20px;
+            border-radius: 9999px;
+            font-size: 15px;
+            outline: none;
+            box-shadow: inset 0 0 15px rgba(255, 68, 0, 0.3);
+        }
+        
+        .nav-btn {
+            width: 44px;
+            height: 44px;
+            background: #330000;
+            border: 3px solid #ff8800;
+            color: #ffcc00;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            transition: all 0.2s;
+        }
+        
+        .nav-btn:hover {
+            background: #ff4400;
+            transform: scale(1.1);
+        }
+        
+        iframe {
+            width: 100%;
+            height: calc(100vh - 210px);
+            border: none;
+            background: white;
+        }
+        
+        .status {
+            font-size: 10px;
+            text-align: center;
+            padding: 6px;
+            background: #111;
+            color: #ff8800;
+            letter-spacing: 2px;
+        }
+        
+        .chicken-logo {
+            image-rendering: pixelated;
+            filter: drop-shadow(0 0 10px #ffcc00);
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+    <div class="browser-window mx-auto w-full max-w-[1480px]">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <img src="chicken.jpeg" alt="Forsaken Chicken" class="chicken-logo w-10 h-10 rounded-xl border-4 border-yellow-400">
+            <div>
+                <span class="text-4xl font-black tracking-tighter text-orange-400">FIRESAKEN</span>
+                <div class="text-[10px] text-orange-300 tracking-[4px] -mt-1">POWERED BY FORSAKEN 🔥 CHICKEN EDITION</div>
+            </div>
+            <div class="flex-1"></div>
+            <div onclick="toggleFullscreen()" class="cursor-pointer text-3xl hover:text-yellow-300">⛶</div>
+        </div>
+
+        <!-- Navigation + Address Bar -->
+        <div class="address-bar">
+            <button onclick="goBack()" class="nav-btn">←</button>
+            <button onclick="goForward()" class="nav-btn">→</button>
+            <button onclick="reloadPage()" class="nav-btn">⟳</button>
+            
+            <input 
+                id="urlInput" 
+                type="text" 
+                placeholder="https:// or search..."
+                onkeypress="if(event.key === 'Enter') navigateToUrl()">
+            
+            <button onclick="navigateToUrl()" 
+                    class="px-8 py-3 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-3xl border-4 border-orange-400 text-sm tracking-widest">
+                GO 🔥
+            </button>
+            
+            <button onclick="openExtensions()" 
+                    class="px-6 py-3 bg-zinc-900 hover:bg-red-950 border-4 border-red-500 text-red-300 font-bold rounded-3xl text-sm flex items-center gap-2">
+                🧩 EXTENSIONS
+            </button>
+        </div>
+
+        <!-- Browser Content -->
+        <iframe id="browserFrame" src="https://www.google.com"></iframe>
+    </div>
+
+    <div class="status">
+        FIRES AKEN v1.0 • GITHUB PAGES READY • CHICKEN APPROVED • USE IN BROWSER OR INSTALL AS APP
+    </div>
+
+    <script>
+        const iframe = document.getElementById('browserFrame');
+        const urlInput = document.getElementById('urlInput');
+
+        function navigateToUrl() {
+            let url = urlInput.value.trim();
+            if (!url) return;
+            
+            if (!/^https?:\/\//i.test(url)) {
+                if (url.includes('.')) {
+                    url = 'https://' + url;
+                } else {
+                    url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
+                }
+            }
+            
+            // This is the proxy-style part (direct iframe load)
+            // For stronger school unblocking like PeteZah, replace the line below with your deployed Ultraviolet proxy URL:
+            // iframe.src = `https://YOUR-UV-DEPLOYMENT.vercel.app/${url}`;
+            iframe.src = url;
+        }
+
+        function reloadPage() {
+            iframe.contentWindow.location.reload();
+        }
+        
+        function goBack() {
+            if (iframe.contentWindow.history) iframe.contentWindow.history.back();
+        }
+        
+        function goForward() {
+            if (iframe.contentWindow.history) iframe.contentWindow.history.forward();
+        }
+        
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        function openExtensions() {
+            alert("🧩 FIRES AKEN EXTENSIONS\n\n" +
+                  "✅ Full Chrome & Safari extension support coming in v2\n" +
+                  "✅ Currently running in proxy mode (iframe)\n" +
+                  "✅ Forsaken-themed addons:\n" +
+                  "   • Auto-Chicken Aim (for Roblox)\n" +
+                  "   • Fire Filter Bypass\n" +
+                  "   • Shedletsky Mode (extra spicy)\n\n" +
+                  "The chicken is proud of you 🔥");
+        }
+
+        // Auto-update address bar when navigating
+        iframe.onload = () => {
+            try {
+                const currentUrl = iframe.contentWindow.location.href;
+                urlInput.value = currentUrl;
+            } catch (e) {
+                // Cross-origin safety
+            }
+        };
+
+        // Start on Google (you can change to any site)
+        window.onload = () => {
+            urlInput.value = "https://www.google.com";
+        };
+    </script>
+</body>
+</html>
